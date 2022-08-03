@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ListaActivity">
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnNuevo"
+            android:text="@string/nuevo">
+        </Button>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btnNuevo"
+            android:id="@+id/lblDisponibles"
+            android:paddingTop="16dp"
+            android:text="CONTACTOS DISPONIBLES"
+            android:textSize="20dp"
+            android:gravity="center">
+        </TextView>
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@android:id/list"
+            android:paddingTop="20dp"
+            android:layout_below="@id/lblDisponibles">
+        </ListView>
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
