@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (contacto.getFavorite()>0) {
                     cbxFavorito.setChecked(true);
                 } else {
-                    limpiar();
+                    cbxFavorito.setChecked(false);
                 }
             }
         }
