@@ -15,12 +15,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/btnNuevo"
-            android:text="@string/nuevo">
+            android:text="Nuevo">
+        </Button>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnCerrar"
+            android:layout_below="@id/btnNuevo"
+            android:textSize="15dp"
+            android:text="Cerrar sesión">
         </Button>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/btnNuevo"
+            android:layout_below="@id/btnCerrar"
             android:id="@+id/lblDisponibles"
             android:paddingTop="16dp"
             android:text="CONTACTOS DISPONIBLES"

@@ -1,8 +1,10 @@
 package com.example.appagenda;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -16,6 +18,8 @@ import android.widget.Toast;
 
 import com.example.appagenda.Objetos.Contactos;
 import com.example.appagenda.Objetos.ReferenciasFirebase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,8 +30,9 @@ import java.util.ArrayList;
 
 public class ListaActivity extends ListActivity {
     private FirebaseDatabase basedatabase;
+    private FirebaseAuth mAuth;
     private DatabaseReference referencia;
-    private Button btnNuevo;
+    private Button btnNuevo, btnCerrar;
     final Context context = this;
 
     @Override
@@ -35,10 +40,12 @@ public class ListaActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista);
         basedatabase = FirebaseDatabase.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         referencia = basedatabase.getReferenceFromUrl(ReferenciasFirebase.URL_DATABASE +
             ReferenciasFirebase.DATABASE_NAME + "/" +
             ReferenciasFirebase.TABLE_NAME);
         btnNuevo = (Button) findViewById(R.id.btnNuevo);
+        btnCerrar = (Button) findViewById(R.id.btnCerrar);
         obtenerContactos();
         btnNuevo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +54,26 @@ public class ListaActivity extends ListActivity {
                 finish();
             }
         });
+        btnCerrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                Intent i = new Intent(ListaActivity.this, LoginActivity.class);
+                startActivity(i);
+                Toast.makeText(context, "Se ha cerrado la sesión.", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            Intent i = new Intent(ListaActivity.this, LoginActivity.class);
+            startActivity(i);
+        }
     }
 
     public void obtenerContactos() {
@@ -117,10 +144,25 @@ public class ListaActivity extends ListActivity {
             btnBorrar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    borrarContacto(objects.get(position).get_ID());
-                    objects.remove(position);
-                    notifyDataSetChanged();
-                    Toast.makeText(getApplicationContext(), "Contacto eliminado con éxito", Toast.LENGTH_SHORT).show();
+                    AlertDialog.Builder confirmar = new AlertDialog.Builder(ListaActivity.this);
+                    confirmar.setTitle("Borrar");
+                    confirmar.setMessage("¿Seguro que quiere borrar este contacto?");
+                    confirmar.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            borrarContacto(objects.get(position).get_ID());
+                            objects.remove(position);
+                            notifyDataSetChanged();
+                            Toast.makeText(getApplicationContext(), "Contacto eliminado con éxito", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    confirmar.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    confirmar.show();
                 }
             });
 
